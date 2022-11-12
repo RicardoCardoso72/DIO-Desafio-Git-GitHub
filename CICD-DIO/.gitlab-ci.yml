@@ -1,5 +1,7 @@
 stages:
   - build
+  - deploy_gcp
+
 build-images: 
   stages: build
   image: docker:20.10.16
@@ -16,3 +18,13 @@ build-images:
   script:
     - docker build -t ricardocardoso72/app-cicd-dio:1.0 app/.
     - docker push ricardocardoso72/app-cicd-dio:1.0
+    
+deploy_gcp:
+
+  stage: deploy_gcp
+
+  before_script:
+    - chmod 400 $SSH-KEY
+
+  script:
+      - ssh -o StrictHostKeyChecking-no - i $SSH_SERVER "sudo rm -RF ./app-cicd-dio/ && ..."
